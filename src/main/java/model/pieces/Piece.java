@@ -41,11 +41,17 @@ public interface Piece {
    * in the chess game
    */
   enum PieceType {
-    PAWN,
-    ROOK,
-    KNIGHT,
-    BISHOP,
-    QUEEN,
-    KING
+    PAWN("Pawn"), ROOK("Rook"), KNIGHT("Knight"),
+    BISHOP("Bishop"), QUEEN("Queen"), KING("King");
+
+    private String name;
+
+    PieceType(String name) {
+      this.name = name;
+    }
+
+    public String toString() {
+      return this.name;
+    }
   }
 }

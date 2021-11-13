@@ -33,4 +33,21 @@ public class ChessPiecePosition implements PiecePosition {
   public int getColumn() {
     return this.col;
   }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == null) {
+      return false;
+    } else if (!(other instanceof PiecePosition)) {
+      return false;
+    } else {
+      return this.col == ((ChessPiecePosition) other).getColumn()
+              && this.row == ((ChessPiecePosition) other).getRow();
+    }
+  }
+
+  @Override
+  public int hashCode() {
+    return (this.row + " " + this.col).hashCode();
+  }
 }

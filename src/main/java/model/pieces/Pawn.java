@@ -30,10 +30,17 @@ public class Pawn extends AbstractChessPiece {
     Piece takePiece = board.getPieceAt(p2);
     if (startCol == endCol) {
       if (startRow == pawnStart) {
-        return ((takePiece == null) &&
-                ((endRow == pawnStart + playerIter) ||
-                (endRow == pawnStart + (2 * playerIter) && board.getPieceAt(
-                        new ChessPiecePosition(endRow + playerIter, endCol)) == null)));
+        if (takePiece == null) {
+          if (endRow == startRow + playerIter) {
+            return true;
+          } else if (endRow == startRow + (2 * playerIter)) {
+            return board.getPieceAt(new ChessPiecePosition(startRow + playerIter, startCol)) == null;
+          } else {
+            return false;
+          }
+        } else {
+          return false;
+        }
       } else {
         return endRow == startRow + playerIter;
       }

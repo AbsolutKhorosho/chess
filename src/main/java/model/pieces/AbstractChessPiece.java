@@ -76,4 +76,10 @@ public abstract class AbstractChessPiece implements Piece {
     }
     return false;
   }
+
+  @Override
+  public String toString() {
+    return String.format("%s piece owned by %s",
+            this.type, this.player);
+  }
 }
