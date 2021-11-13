@@ -46,7 +46,7 @@ public class Pawn extends AbstractChessPiece {
       }
     } else if (endCol == startCol + 1
               || endCol == startCol - 1) {
-      return (endRow == startRow + playerIter
+      return (takePiece != null && endRow == startRow + playerIter
               && takePiece.getType() != null
               && takePiece.getPlayer() != this.getPlayer());
     } else {
