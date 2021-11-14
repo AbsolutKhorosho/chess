@@ -23,6 +23,4 @@ public class QueenTest {
   public static void setup() {
     model = mock(ChessBoard.class);
   }
-
-
 }
