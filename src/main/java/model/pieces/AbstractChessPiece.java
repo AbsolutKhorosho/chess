@@ -45,13 +45,12 @@ public abstract class AbstractChessPiece implements Piece {
 
   // Returns true if the move (rectangular direction) is valid.
   protected boolean isValidRectangularMove(PiecePosition p1, PiecePosition p2, BoardState board) {
-    int startRow = p1.getRow();
-    int startCol = p1.getColumn();
-    int endRow = p2.getRow();
-    int endCol = p2.getColumn();
+    if (p1.equals(p2) || board.getPieceAt(p1) == null) {
+      return false;
+    }
     Piece takePiece = board.getPieceAt(p2);
-    return (!rectPieceInWay(startRow, startCol, endRow, endCol, board)
-            && (startRow == endRow ^ startCol == endCol)
+    return (!rectPieceInWay(p1.getRow(), p1.getColumn(), p2.getRow(), p2.getColumn(), board)
+            && (p1.getRow() == p2.getRow() ^ p1.getColumn() == p2.getColumn())
             && (takePiece == null || takePiece.getPlayer() != this.getPlayer()));
   }
 
@@ -79,14 +78,13 @@ public abstract class AbstractChessPiece implements Piece {
 
   // Returns true if the diagonal move is valid.
   protected boolean isValidDiagonalMove(PiecePosition p1, PiecePosition p2, BoardState board) {
-    int startRow = p1.getRow();
-    int startCol = p1.getColumn();
-    int endRow = p2.getRow();
-    int endCol = p2.getColumn();
+    if (p1.equals(p2) || board.getPieceAt(p1) == null) {
+      return false;
+    }
     Piece takePiece = board.getPieceAt(p2);
     return takePiece.getPlayer() != this.getPlayer()
-            && Math.abs(endRow - startRow) == Math.abs(endCol - startCol)
-            && !diagPieceInWay(startRow, startCol, endRow, endCol, board);
+            && Math.abs(p2.getRow() - p1.getRow()) == Math.abs(p2.getColumn() - p1.getColumn())
+            && !diagPieceInWay(p1.getRow(), p1.getColumn(), p2.getRow(), p2.getColumn(), board);
   }
 
   // Returns true if there is a piece blocking

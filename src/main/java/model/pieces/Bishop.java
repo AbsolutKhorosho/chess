@@ -23,9 +23,6 @@ public class Bishop extends AbstractChessPiece {
   // Returns true if the specified bishop move is valid.
   @Override
   public boolean isValidMove(PiecePosition p1, PiecePosition p2, BoardState board) {
-    if (p1.equals(p2) || board.getPieceAt(p1) == null) {
-      return false;
-    }
     return isValidDiagonalMove(p1, p2, board);
   }
 }
