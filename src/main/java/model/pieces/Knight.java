@@ -25,13 +25,15 @@ public class Knight extends AbstractChessPiece {
   // Returns true if the knight move is valid.
   @Override
   public boolean isValidMove(PiecePosition p1, PiecePosition p2, BoardState board) {
+    if (board.getPieceAt(p1) == null) {
+      return false;
+    }
     int startRow = p1.getRow();
     int startCol = p1.getColumn();
     int endRow = p2.getRow();
     int endCol = p2.getColumn();
     Piece takePiece = board.getPieceAt(p2);
-    return (board.getPieceAt(p1) != null
-            && (takePiece == null || takePiece.getPlayer() != this.getPlayer())
+    return ((takePiece == null || takePiece.getPlayer() != this.getPlayer())
             && ((Math.abs(startRow - endRow) == 2 && Math.abs(startCol - endCol) == 1)
             ^ (Math.abs(startRow - endRow) == 1 && Math.abs(startCol - endCol) == 2)));
   }

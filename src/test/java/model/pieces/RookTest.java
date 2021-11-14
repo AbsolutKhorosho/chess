@@ -340,4 +340,14 @@ public class RookTest {
     assertFalse(testPiece.isValidMove(new ChessPiecePosition(5, 4),
             new ChessPiecePosition(1, 4), model));
   }
+
+  @Test
+  public void moveFromEmpty() {
+    when(model.getPieceAt(new ChessPiecePosition(5, 4))).thenReturn(null);
+    when(model.getPieceAt(new ChessPiecePosition(4, 4))).thenReturn(null);
+    when(model.getPieceAt(new ChessPiecePosition(3, 4))).thenReturn(null);
+    testPiece = new Rook(Player.ONE);
+    assertFalse(testPiece.isValidMove(new ChessPiecePosition(5, 4),
+            new ChessPiecePosition(4, 4), model));
+  }
 }

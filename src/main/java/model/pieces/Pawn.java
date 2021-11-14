@@ -21,6 +21,9 @@ public class Pawn extends AbstractChessPiece {
   // Returns true if the pawn move is valid.
   @Override
   public boolean isValidMove(PiecePosition p1, PiecePosition p2, BoardState board) {
+    if (board.getPieceAt(p1) == null) {
+      return false;
+    }
     int startRow = p1.getRow();
     int startCol = p1.getColumn();
     int endRow = p2.getRow();

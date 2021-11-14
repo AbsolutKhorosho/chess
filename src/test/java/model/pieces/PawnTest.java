@@ -364,4 +364,14 @@ public class PawnTest {
     assertFalse(testPiece.isValidMove(new ChessPiecePosition(3, 5),
             new ChessPiecePosition(4, 6), mockBoard));
   }
+
+  @Test
+  public void moveFromEmpty() {
+    when(mockBoard.getPieceAt(new ChessPiecePosition(1, 5))).thenReturn(null);
+    when(mockBoard.getPieceAt(new ChessPiecePosition(2, 5))).thenReturn(null);
+    when(mockBoard.getPieceAt(new ChessPiecePosition(3, 5))).thenReturn(null);
+    testPiece = new Pawn(Player.ONE);
+    assertFalse(testPiece.isValidMove(new ChessPiecePosition(1, 5),
+            new ChessPiecePosition(2, 5), mockBoard));
+  }
 }
