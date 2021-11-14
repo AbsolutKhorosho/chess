@@ -51,7 +51,8 @@ public abstract class AbstractChessPiece implements Piece {
     int endRow = p2.getRow();
     int endCol = p2.getColumn();
     Piece takePiece = board.getPieceAt(p2);
-    return (!pieceInWay(startRow, startCol, endRow, endCol, board)
+    return (board.getPieceAt(p1) != null
+            && !pieceInWay(startRow, startCol, endRow, endCol, board)
             && (startRow == endRow ^ startCol == endCol)
             && (takePiece == null || takePiece.getPlayer() != this.getPlayer()));
   }

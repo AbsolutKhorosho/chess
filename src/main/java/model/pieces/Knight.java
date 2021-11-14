@@ -30,7 +30,8 @@ public class Knight extends AbstractChessPiece {
     int endRow = p2.getRow();
     int endCol = p2.getColumn();
     Piece takePiece = board.getPieceAt(p2);
-    return ((takePiece == null || takePiece.getPlayer() == this.getPlayer())
+    return (board.getPieceAt(p1) != null
+            && (takePiece == null || takePiece.getPlayer() != this.getPlayer())
             && ((Math.abs(startRow - endRow) == 2 && Math.abs(startCol - endCol) == 1)
             ^ (Math.abs(startRow - endRow) == 1 && Math.abs(startCol - endCol) == 2)));
   }
