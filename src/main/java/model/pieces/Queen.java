@@ -23,7 +23,7 @@ public class Queen extends AbstractChessPiece {
   // Returns true if the specified move is valid.
   @Override
   public boolean isValidMove(PiecePosition p1, PiecePosition p2, BoardState board) {
-    return (isValidRectangularMove(p1, p1, board)
+    return (isValidRectangularMove(p1, p2, board)
            || isValidDiagonalMove(p1, p2, board));
   }
 }
