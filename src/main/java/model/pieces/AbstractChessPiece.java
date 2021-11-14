@@ -82,7 +82,7 @@ public abstract class AbstractChessPiece implements Piece {
       return false;
     }
     Piece takePiece = board.getPieceAt(p2);
-    return takePiece.getPlayer() != this.getPlayer()
+    return (takePiece == null || takePiece.getPlayer() != this.getPlayer())
             && Math.abs(p2.getRow() - p1.getRow()) == Math.abs(p2.getColumn() - p1.getColumn())
             && !diagPieceInWay(p1.getRow(), p1.getColumn(), p2.getRow(), p2.getColumn(), board);
   }
