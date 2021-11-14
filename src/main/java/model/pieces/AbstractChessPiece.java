@@ -4,7 +4,6 @@ import model.BoardState;
 import model.BoardState.Player;
 import model.ChessPiecePosition;
 import model.PiecePosition;
-import model.pieces.Piece.PieceType;
 
 /**
  * Abstract super class for a chess piece
@@ -51,15 +50,15 @@ public abstract class AbstractChessPiece implements Piece {
     int endRow = p2.getRow();
     int endCol = p2.getColumn();
     Piece takePiece = board.getPieceAt(p2);
-    return (!pieceInWay(startRow, startCol, endRow, endCol, board)
+    return (!rectPieceInWay(startRow, startCol, endRow, endCol, board)
             && (startRow == endRow ^ startCol == endCol)
             && (takePiece == null || takePiece.getPlayer() != this.getPlayer()));
   }
 
   // Returns true if there is a piece in the way
   // of the movement between the two.
-  private boolean pieceInWay(int startRow, int startCol,
-                             int endRow, int endCol, BoardState board) {
+  private boolean rectPieceInWay(int startRow, int startCol,
+                                 int endRow, int endCol, BoardState board) {
     Piece curPiece;
     boolean iterRow = startRow != endRow;
     int iter = iterRow ? (endRow > startRow ? 1 : -1) : (endCol > startCol ? 1 : -1);
@@ -78,6 +77,40 @@ public abstract class AbstractChessPiece implements Piece {
     return false;
   }
 
+  // Returns true if the diagonal move is valid.
+  protected boolean isValidDiagonalMove(PiecePosition p1, PiecePosition p2, BoardState board) {
+    int startRow = p1.getRow();
+    int startCol = p1.getColumn();
+    int endRow = p2.getRow();
+    int endCol = p2.getColumn();
+    Piece takePiece = board.getPieceAt(p2);
+    return takePiece.getPlayer() != this.getPlayer()
+            && Math.abs(endRow - startRow) == Math.abs(endCol - startCol)
+            && !diagPieceInWay(startRow, startCol, endRow, endCol, board);
+  }
+
+  // Returns true if there is a piece blocking
+  // the move.
+  private boolean diagPieceInWay(int startRow, int startCol,
+                                 int endRow, int endCol, BoardState board) {
+    int rowIter = endRow > startRow ? 1 : -1;
+    int colIter = endCol > startCol ? 1 : -1;
+    int colCount = startCol + colIter;
+    for (int i = startRow + rowIter; i != endRow; i += rowIter) {
+      if (board.getPieceAt(new ChessPiecePosition(i, colCount)) != null) {
+        return true;
+      }
+      colCount += colIter;
+    }
+    return false;
+  }
+
+  /**
+   * Returns the name of the piece
+   * and the player that owns it.
+   * @return string representation of a piece
+   *         with the type and piece owner
+   */
   @Override
   public String toString() {
     return String.format("%s piece owned by %s",

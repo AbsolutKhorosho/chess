@@ -23,7 +23,7 @@ public class Rook extends AbstractChessPiece {
   // Returns true if the rook move is valid.
   @Override
   public boolean isValidMove(PiecePosition p1, PiecePosition p2, BoardState board) {
-    if (board.getPieceAt(p1) == null) {
+    if (p1.equals(p2) || board.getPieceAt(p1) == null) {
       return false;
     }
     return isValidRectangularMove(p1, p2, board);
