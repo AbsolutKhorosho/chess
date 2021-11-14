@@ -53,24 +53,25 @@ public abstract class AbstractChessPiece implements Piece {
     Piece takePiece = board.getPieceAt(p2);
     return (!pieceInWay(startRow, startCol, endRow, endCol, board)
             && (startRow == endRow ^ startCol == endCol)
-            && (takePiece.getPlayer() != this.getPlayer()));
+            && (takePiece == null || takePiece.getPlayer() != this.getPlayer()));
   }
 
   // Returns true if there is a piece in the way
   // of the movement between the two.
   private boolean pieceInWay(int startRow, int startCol,
                              int endRow, int endCol, BoardState board) {
-    int iter;
     Piece curPiece;
-    boolean iterRow = startRow == endRow;
-    iter = startCol < endCol ? 1 : -1;
-    for (int i = startCol + iter; i != endCol; i += iter) {
+    boolean iterRow = startRow != endRow;
+    int iter = iterRow ? (endRow > startRow ? 1 : -1) : (endCol > startCol ? 1 : -1);
+    int start = iterRow ? startRow + iter : startCol + iter;
+    int end = iterRow ? endRow : endCol;
+    for (int i = start; i != end; i += iter) {
       if (iterRow) {
-        curPiece = board.getPieceAt(new ChessPiecePosition(startRow, i));
-      } else {
         curPiece = board.getPieceAt(new ChessPiecePosition(i, startCol));
+      } else {
+        curPiece = board.getPieceAt(new ChessPiecePosition(startRow, i));
       }
-      if (curPiece == null) {
+      if (curPiece != null) {
         return true;
       }
     }
