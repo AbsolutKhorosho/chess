@@ -40,6 +40,9 @@ public class King extends AbstractCastlePiece {
     Piece checkPiece;
     for (int row = 0; row < board.getBoardHeight(); row++) {
       for (int col = 0; col < board.getBoardWidth(); col++) {
+        if (pos.equals(new ChessPiecePosition(row, col))) {
+          continue;
+        }
         checkPiece = board.getPieceAt(new ChessPiecePosition(row, col));
         if (checkPiece != null && checkPiece.getPlayer() != this.getPlayer()) {
           if (checkPiece.isValidMove(new ChessPiecePosition(row, col),

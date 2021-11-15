@@ -103,6 +103,18 @@ public abstract class AbstractChessPiece implements Piece {
     return false;
   }
 
+  @Override
+  public boolean equals(Object other) {
+    if (other == null) {
+      return false;
+    } else if (!(other instanceof Piece)) {
+      return false;
+    } else {
+      return this.getPlayer() == ((Piece)other).getPlayer()
+              && this.getType() == ((Piece)other).getType();
+    }
+  }
+
   /**
    * Returns the name of the piece
    * and the player that owns it.

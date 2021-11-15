@@ -1,6 +1,5 @@
 package model.pieces;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import model.BoardState;
@@ -24,15 +23,13 @@ public class KingTest {
 
   private Piece testPiece;
 
-  @BeforeAll
-  public static void setup() {
-    model = mock(ChessBoard.class);
-  }
-
   // SIMPLE MOVE TEST
 
   @Test
   public void forwardTest() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     when(model.getPieceAt(new ChessPiecePosition(0, 4))).thenReturn(new King(Player.ONE));
     when(model.getPieceAt(new ChessPiecePosition(1, 4))).thenReturn(null);
     testPiece = new King(Player.ONE);
@@ -42,6 +39,9 @@ public class KingTest {
 
   @Test
   public void upRightTest() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     when(model.getPieceAt(new ChessPiecePosition(0, 4))).thenReturn(new King(Player.ONE));
     when(model.getPieceAt(new ChessPiecePosition(1, 3))).thenReturn(null);
     testPiece = new King(Player.ONE);
@@ -51,6 +51,9 @@ public class KingTest {
 
   @Test
   public void rightTest() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     when(model.getPieceAt(new ChessPiecePosition(0, 4))).thenReturn(new King(Player.ONE));
     when(model.getPieceAt(new ChessPiecePosition(0, 3))).thenReturn(null);
     testPiece = new King(Player.ONE);
@@ -60,6 +63,9 @@ public class KingTest {
 
   @Test
   public void downRightTest() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     when(model.getPieceAt(new ChessPiecePosition(1, 4))).thenReturn(new King(Player.ONE));
     when(model.getPieceAt(new ChessPiecePosition(0, 3))).thenReturn(null);
     testPiece = new King(Player.ONE);
@@ -69,6 +75,9 @@ public class KingTest {
 
   @Test
   public void backTest() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     when(model.getPieceAt(new ChessPiecePosition(1, 4))).thenReturn(new King(Player.ONE));
     when(model.getPieceAt(new ChessPiecePosition(0, 4))).thenReturn(null);
     testPiece = new King(Player.ONE);
@@ -78,6 +87,9 @@ public class KingTest {
 
   @Test
   public void downLeftTest() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     when(model.getPieceAt(new ChessPiecePosition(1, 4))).thenReturn(new King(Player.ONE));
     when(model.getPieceAt(new ChessPiecePosition(0, 5))).thenReturn(null);
     testPiece = new King(Player.ONE);
@@ -87,6 +99,9 @@ public class KingTest {
 
   @Test
   public void leftTest() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     when(model.getPieceAt(new ChessPiecePosition(1, 4))).thenReturn(new King(Player.ONE));
     when(model.getPieceAt(new ChessPiecePosition(1, 5))).thenReturn(null);
     testPiece = new King(Player.ONE);
@@ -96,6 +111,9 @@ public class KingTest {
 
   @Test
   public void upLeftTest() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     when(model.getPieceAt(new ChessPiecePosition(0, 4))).thenReturn(new King(Player.ONE));
     when(model.getPieceAt(new ChessPiecePosition(1, 5))).thenReturn(null);
     testPiece = new King(Player.ONE);
@@ -105,6 +123,9 @@ public class KingTest {
 
   @Test
   public void takeEnemy() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     when(model.getPieceAt(new ChessPiecePosition(0, 4))).thenReturn(new King(Player.ONE));
     when(model.getPieceAt(new ChessPiecePosition(1, 5))).thenReturn(new Pawn(Player.TWO));
     testPiece = new King(Player.ONE);
@@ -114,6 +135,9 @@ public class KingTest {
 
   @Test
   public void takeMyPiece() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     when(model.getPieceAt(new ChessPiecePosition(0, 4))).thenReturn(new King(Player.ONE));
     when(model.getPieceAt(new ChessPiecePosition(1, 5))).thenReturn(new Pawn(Player.ONE));
     testPiece = new King(Player.ONE);
@@ -121,8 +145,13 @@ public class KingTest {
             new ChessPiecePosition(1, 5), model));
   }
 
+  // CHECK MOVES
+
   @Test
   public void rookPutKingInCheck() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     when(model.getPieceAt(new ChessPiecePosition(4, 0))).thenReturn(new Rook(Player.TWO));
     when(model.getPieceAt(new ChessPiecePosition(3, 0))).thenReturn(null);
     when(model.getPieceAt(new ChessPiecePosition(2, 0))).thenReturn(null);
@@ -142,6 +171,9 @@ public class KingTest {
 
   @Test
   public void pawnPutKingInCheck() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     when(model.getPieceAt(new ChessPiecePosition(2, 0))).thenReturn(new Pawn(Player.TWO));
     when(model.getPieceAt(new ChessPiecePosition(1, 0))).thenReturn(null);
     when(model.getPieceAt(new ChessPiecePosition(0, 0))).thenReturn(null);
@@ -157,6 +189,9 @@ public class KingTest {
 
   @Test
   public void bishopPutKingInCheck() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     when(model.getPieceAt(new ChessPiecePosition(3, 7))).thenReturn(new Bishop(Player.TWO));
     when(model.getPieceAt(new ChessPiecePosition(2, 6))).thenReturn(null);
     when(model.getPieceAt(new ChessPiecePosition(1, 5))).thenReturn(null);
@@ -171,6 +206,9 @@ public class KingTest {
 
   @Test
   public void knightPutKingInCheck() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     when(model.getPieceAt(new ChessPiecePosition(5, 4))).thenReturn(new Knight(Player.TWO));
     when(model.getPieceAt(new ChessPiecePosition(3, 5))).thenReturn(null);
     testPiece = new King(Player.ONE);
@@ -183,6 +221,9 @@ public class KingTest {
 
   @Test
   public void queenPutKingInCheck() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     when(model.getPieceAt(new ChessPiecePosition(5, 4))).thenReturn(new Queen(Player.TWO));
     testPiece = new King(Player.ONE);
     when(model.getPieceAt(new ChessPiecePosition(1, 5))).thenReturn(testPiece);
@@ -196,6 +237,9 @@ public class KingTest {
 
   @Test
   public void myPiecePutKingInCheck() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     when(model.getPieceAt(new ChessPiecePosition(5, 4))).thenReturn(new Queen(Player.ONE));
     testPiece = new King(Player.ONE);
     when(model.getPieceAt(new ChessPiecePosition(1, 5))).thenReturn(testPiece);
@@ -205,8 +249,13 @@ public class KingTest {
             new ChessPiecePosition(1, 4), model));
   }
 
+  // CASTLE MOVES
+
   @Test
   public void rightCastleTest() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     testPiece = new King(Player.ONE);
     when(model.getPieceAt(new ChessPiecePosition(0, 4))).thenReturn(testPiece);
     when(model.getPieceAt(new ChessPiecePosition(0, 3))).thenReturn(null);
@@ -219,6 +268,9 @@ public class KingTest {
 
   @Test
   public void leftCastleTest() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     testPiece = new King(Player.ONE);
     when(model.getPieceAt(new ChessPiecePosition(0, 4))).thenReturn(testPiece);
     when(model.getPieceAt(new ChessPiecePosition(0, 5))).thenReturn(null);
@@ -231,6 +283,9 @@ public class KingTest {
 
   @Test
   public void p2rightCastleTest() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     testPiece = new King(Player.TWO);
     when(model.getPieceAt(new ChessPiecePosition(7, 4))).thenReturn(testPiece);
     when(model.getPieceAt(new ChessPiecePosition(7, 5))).thenReturn(null);
@@ -243,6 +298,9 @@ public class KingTest {
 
   @Test
   public void p2leftCastleTest() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
     testPiece = new King(Player.TWO);
     when(model.getPieceAt(new ChessPiecePosition(7, 4))).thenReturn(testPiece);
     when(model.getPieceAt(new ChessPiecePosition(7, 3))).thenReturn(null);
@@ -252,5 +310,50 @@ public class KingTest {
     when(model.getBoardWidth()).thenReturn(8);
     assertTrue(testPiece.isValidMove(new ChessPiecePosition(7, 4),
             new ChessPiecePosition(7, 2), model));
+  }
+
+  @Test
+  public void castleMyPieceInWay() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
+    testPiece = new King(Player.ONE);
+    when(model.getPieceAt(new ChessPiecePosition(0, 4))).thenReturn(testPiece);
+    when(model.getPieceAt(new ChessPiecePosition(0, 5))).thenReturn(null);
+    when(model.getPieceAt(new ChessPiecePosition(0, 6))).thenReturn(new Bishop(Player.ONE));
+    when(model.getPieceAt(new ChessPiecePosition(0, 7))).thenReturn(new Rook(Player.ONE));
+    assertFalse(testPiece.isValidMove(new ChessPiecePosition(0, 4),
+            new ChessPiecePosition(0, 6), model));
+  }
+
+  @Test
+  public void castleEnemyPieceInWay() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
+    testPiece = new King(Player.ONE);
+    when(model.getPieceAt(new ChessPiecePosition(0, 4))).thenReturn(testPiece);
+    when(model.getPieceAt(new ChessPiecePosition(0, 3))).thenReturn(null);
+    when(model.getPieceAt(new ChessPiecePosition(0, 2))).thenReturn(new Knight(Player.TWO));
+    when(model.getPieceAt(new ChessPiecePosition(0, 1))).thenReturn(null);
+    when(model.getPieceAt(new ChessPiecePosition(0, 0))).thenReturn(new Rook(Player.ONE));
+    assertFalse(testPiece.isValidMove(new ChessPiecePosition(0, 4),
+            new ChessPiecePosition(0, 2), model));
+  }
+
+  @Test
+  public void castleAfterMove() {
+    model = mock(ChessBoard.class);
+    when(model.getBoardWidth()).thenReturn(8);
+    when(model.getBoardHeight()).thenReturn(8);
+    testPiece = new King(Player.ONE);
+    when(model.getPieceAt(new ChessPiecePosition(0, 4))).thenReturn(testPiece);
+    when(model.getPieceAt(new ChessPiecePosition(0, 5))).thenReturn(null);
+    when(model.getPieceAt(new ChessPiecePosition(0, 6))).thenReturn(null);
+    when(model.getPieceAt(new ChessPiecePosition(0, 7))).thenReturn(new Rook(Player.ONE));
+    assertTrue(testPiece.isValidMove(new ChessPiecePosition(0, 4),
+            new ChessPiecePosition(1, 4), model));
+    assertFalse(testPiece.isValidMove(new ChessPiecePosition(0, 4),
+            new ChessPiecePosition(0, 2), model));
   }
 }
