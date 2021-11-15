@@ -11,6 +11,20 @@ import model.pieces.Piece;
 public interface BoardState {
 
   /**
+   * Returns the width of the
+   * board in spaces.
+   * @return board width
+   */
+  int getBoardWidth();
+
+  /**
+   * Returns the height of the
+   * board in spaces.
+   * @return board height
+   */
+  int getBoardHeight();
+
+  /**
    * Gets the piece at the current
    * position of the board using
    * rectangular coordinates.

@@ -9,7 +9,7 @@ import model.PiecePosition;
  *
  * @author Matt Stetter
  */
-public class Rook extends AbstractChessPiece {
+public class Rook extends AbstractCastlePiece {
 
   /**
    * Sets the piece type and player
@@ -23,6 +23,10 @@ public class Rook extends AbstractChessPiece {
   // Returns true if the rook move is valid.
   @Override
   public boolean isValidMove(PiecePosition p1, PiecePosition p2, BoardState board) {
-    return isValidRectangularMove(p1, p2, board);
+    boolean validMove = isValidRectangularMove(p1, p2, board);
+    if (validMove) {
+      this.hasMoved = true;
+    }
+    return validMove;
   }
 }

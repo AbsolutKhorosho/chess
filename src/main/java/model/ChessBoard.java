@@ -26,6 +26,16 @@ public class ChessBoard implements Board {
 
   }
 
+  @Override
+  public int getBoardWidth() {
+    return 0;
+  }
+
+  @Override
+  public int getBoardHeight() {
+    return 0;
+  }
+
   // Returns the piece at the provided position.
   @Override
   public Piece getPieceAt(PiecePosition pos) {
