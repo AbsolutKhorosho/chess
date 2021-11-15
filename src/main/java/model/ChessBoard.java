@@ -33,11 +33,11 @@ public class ChessBoard implements Board {
    * Generates a chess board.
    * (8x8 grid with traditional setup)
    */
-  public ChessBoard() {
+  public ChessBoard(Player startingPlayer) {
     this.height = 8;
     this.width = 8;
     this.initializeBoard();
-    curPlayer = Player.ONE;
+    this.curPlayer = startingPlayer;
   }
 
   // Initializes the board with the classic arrangement
@@ -107,16 +107,14 @@ public class ChessBoard implements Board {
   public void move(PiecePosition p1, PiecePosition p2)
       throws IllegalArgumentException {
     Piece movingPiece = this.getPieceAt(p1);
+    if (movingPiece == null) {
+      throw new IllegalArgumentException("Cannot move from empty space");
+    }
     Piece takePiece = this.getPieceAt(p2);
     MoveType type;
     if (movingPiece.isValidMove(p1, p2, this)) {
       if (movingPiece.getPlayer() != this.curPlayer) {
         throw new IllegalArgumentException("Cannot move the opponent's piece");
-      } else if (movingPiece.getType() == PieceType.KING
-              && Math.abs(p2.getColumn() - p1.getColumn()) == 2) {
-        type = MoveType.CASTLE;
-      } else if (takePiece != null) {
-        type = MoveType.CAPTURE;
       } else if (isKingInCheck(movingPiece.getPlayer())) {
         if (movingPiece instanceof King) {
           type = MoveType.MOVE;
@@ -132,6 +130,11 @@ public class ChessBoard implements Board {
             type = MoveType.MOVE;
           }
         }
+      } else if (movingPiece.getType() == PieceType.KING
+              && Math.abs(p2.getColumn() - p1.getColumn()) == 2) {
+        type = MoveType.CASTLE;
+      } else if (takePiece != null) {
+        type = MoveType.CAPTURE;
       } else {
         type = MoveType.MOVE;
       }
@@ -139,6 +142,13 @@ public class ChessBoard implements Board {
       throw new IllegalArgumentException("Invalid move");
     }
     this.makeMove(movingPiece, type, p1, p2);
+    if (movingPiece instanceof King) {
+      if (movingPiece.getPlayer() == Player.ONE) {
+        p1Position = new ChessPiecePosition(p2.getRow(), p2.getColumn());
+      } else {
+        p2Position = new ChessPiecePosition(p2.getRow(), p2.getColumn());
+      }
+    }
     if (movingPiece instanceof AbstractCastlePiece) {
       ((AbstractCastlePiece) movingPiece).setHasMoved();
     }
@@ -198,16 +208,20 @@ public class ChessBoard implements Board {
   @Override
   public State isGameOver() {
     boolean p1HasMove = this.playerHasMove(Player.ONE);
+    System.out.println(p1HasMove);
     boolean p1InCheck = this.isKingInCheck(Player.ONE);
+    System.out.println(p1InCheck);
     boolean p2HasMove = this.playerHasMove(Player.TWO);
+    System.out.println(p2HasMove);
     boolean p2InCheck = this.isKingInCheck(Player.TWO);
+    System.out.println(p2InCheck);
     if (p1HasMove && p2HasMove) {
       return State.IN_PROGRESS;
-    } else if (p1HasMove && p2InCheck) {
+    } else if (p1HasMove) {
       return State.P1_WINNER;
-    } else if (p2HasMove && p1InCheck) {
+    } else if (p2HasMove) {
       return State.P2_WINNER;
-    } else if (!p1InCheck && !p2InCheck) {
+    } else if (!p1InCheck || !p2InCheck) {
       return State.STALEMATE;
     } else {
       return null;
@@ -224,7 +238,65 @@ public class ChessBoard implements Board {
             for (int pCol = 0; pCol < this.width; pCol++) {
               if (cur.isValidMove(new ChessPiecePosition(row, col),
                       new ChessPiecePosition(pRow, pCol), this)) {
-                return true;
+                if (isKingInCheck(cur.getPlayer())) {
+                  MoveType type;
+                  King k = this.curPlayer == Player.ONE ? p1King : p2King;
+                  Piece pieceAtPos = this.getPieceAt(new ChessPiecePosition(pRow, pCol));
+                  if (cur.equals(k)) {
+                    if (Math.abs(pCol - col) == 2) {
+                      type = MoveType.CASTLE;
+                      this.board[pRow][pCol] = k;
+                      this.board[row][col] = null;
+                      Piece getRook;
+                      if (pCol == 6) {
+                        getRook = this.board[pRow][7];
+                        this.board[pRow][5] = getRook;
+                        this.board[pRow][7] = null;
+                      } else {
+                        getRook = this.board[pRow][0];
+                        this.board[pRow][2] = getRook;
+                        this.board[pRow][0] = null;
+                      }
+                    } else {
+                      type = MoveType.MOVE;
+                      this.board[pRow][pCol] = cur;
+                      this.board[row][col] = null;
+                    }
+                    if (cur.getPlayer() == Player.ONE) {
+                      p1Position = new ChessPiecePosition(pRow, pCol);
+                    } else {
+                      p2Position = new ChessPiecePosition(pRow, pCol);
+                    }
+                  } else {
+                    type = MoveType.MOVE;
+                    this.board[pRow][pCol] = cur;
+                    this.board[row][col] = null;
+                  }
+                  if (isKingInCheck(cur.getPlayer())) {
+                    undoAllMoves(cur, pieceAtPos, type, new ChessPiecePosition(row, col), new ChessPiecePosition(pRow, pCol));
+                    if (cur.getType() == PieceType.KING) {
+                      if (cur.getPlayer() == Player.ONE) {
+                        p1Position = new ChessPiecePosition(row, col);
+                      } else {
+                        p2Position = new ChessPiecePosition(row, col);
+                      }
+                    }
+                  } else {
+                    if (cur.getType() == PieceType.KING) {
+                      if (cur.getPlayer() == Player.ONE) {
+                        p1Position = new ChessPiecePosition(row, col);
+                      } else {
+                        p2Position = new ChessPiecePosition(row, col);
+                      }
+                    }
+                    undoAllMoves(cur, pieceAtPos, type, new ChessPiecePosition(row, col), new ChessPiecePosition(pRow, pCol));
+                    System.out.printf("(%d, %d) to (%d, %d)%n", row, col, pRow, pCol);
+                    return true;
+                  }
+                } else {
+                  System.out.println("King not in check");
+                  return true;
+                }
               }
             }
           }
@@ -232,6 +304,28 @@ public class ChessBoard implements Board {
       }
     }
     return false;
+  }
+
+  private void undoAllMoves(Piece cur, Piece takePiece, MoveType type, PiecePosition p1, PiecePosition p2) {
+    if (type == MoveType.CASTLE) {
+      Piece rook;
+      if (p2.getColumn() == 6) {
+        rook = this.getPieceAt(new ChessPiecePosition(p2.getRow(), 5));
+        this.board[p2.getRow()][4] = cur;
+        this.board[p2.getRow()][7] = rook;
+        this.board[p2.getRow()][5] = null;
+        this.board[p2.getRow()][6] = null;
+      } else {
+        rook = this.getPieceAt(new ChessPiecePosition(p2.getRow(), 2));
+        this.board[p2.getRow()][3] = cur;
+        this.board[p2.getRow()][0] = rook;
+        this.board[p2.getRow()][2] = null;
+        this.board[p2.getRow()][1] = null;
+      }
+    } else {
+      this.board[p1.getRow()][p1.getColumn()] = cur;
+      this.board[p2.getRow()][p2.getColumn()] = takePiece;
+    }
   }
 
   // Returns true if the specific
