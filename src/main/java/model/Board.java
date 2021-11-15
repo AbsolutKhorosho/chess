@@ -14,19 +14,10 @@ public interface Board extends BoardState {
    * is thrown if the move is invalid.
    * @param p1 the starting position
    * @param p2 the ending position
-   * @return INVALID if the move is invalid
-   *         MOVE if a move to an empty space
-   *         CAPTURE if the move is a capture move
-   *         CASTLE if the move is a castle
+   * @throws IllegalArgumentException if the specified move
+   *         is invalid.
    */
-  MoveType move(PiecePosition p1, PiecePosition p2) throws IllegalArgumentException;
-
-  enum MoveType {
-    INVALID,
-    MOVE,
-    CAPTURE,
-    CASTLE
-  }
+  void move(PiecePosition p1, PiecePosition p2) throws IllegalArgumentException;
 
   /**
    * Returns whether the game is over.
@@ -38,12 +29,20 @@ public interface Board extends BoardState {
    *         P2_WINNER if player 2 wins
    *         STALEMATE if the game is a stalemate
    */
-  FinalState isGameOver();
+  State isGameOver();
 
-  enum FinalState {
+  enum State {
     IN_PROGRESS,
     P1_WINNER,
     P2_WINNER,
     STALEMATE
   }
+
+  /**
+   * Returns true if the player's king
+   * is in check.
+   * @param p player
+   * @return true if in check
+   */
+  boolean isKingInCheck(Player p);
 }
