@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.pieces.AbstractCastlePiece;
 import model.pieces.Bishop;
 import model.pieces.King;
 import model.pieces.Knight;
@@ -63,6 +64,7 @@ public class ChessBoard implements Board {
       }
       rowStart = 7;
       rowIter = -1;
+      p = Player.TWO;
     }
     this.p1King = (King)this.board[0][4];
     this.p1Position = new ChessPiecePosition(0, 4);
@@ -108,11 +110,28 @@ public class ChessBoard implements Board {
     Piece takePiece = this.getPieceAt(p2);
     MoveType type;
     if (movingPiece.isValidMove(p1, p2, this)) {
-      if (movingPiece.getType() == PieceType.KING
-          && Math.abs(p2.getColumn() - p1.getColumn()) == 2) {
+      if (movingPiece.getPlayer() != this.curPlayer) {
+        throw new IllegalArgumentException("Cannot move the opponent's piece");
+      } else if (movingPiece.getType() == PieceType.KING
+              && Math.abs(p2.getColumn() - p1.getColumn()) == 2) {
         type = MoveType.CASTLE;
       } else if (takePiece != null) {
         type = MoveType.CAPTURE;
+      } else if (isKingInCheck(movingPiece.getPlayer())) {
+        if (movingPiece instanceof King) {
+          type = MoveType.MOVE;
+        } else {
+          King playerKing = movingPiece.getPlayer() == Player.ONE ? p1King : p2King;
+          PiecePosition kingPosition = movingPiece.getPlayer() == Player.ONE ? p1Position : p2Position;
+          this.makeMove(movingPiece, MoveType.MOVE, p1, p2);
+          if (playerKing.isInCheck(kingPosition, this)) {
+            this.undoMove(movingPiece, p1, p2);
+            throw new IllegalArgumentException("Must move king out of check");
+          } else {
+            this.undoMove(movingPiece, p1, p2);
+            type = MoveType.MOVE;
+          }
+        }
       } else {
         type = MoveType.MOVE;
       }
@@ -120,6 +139,18 @@ public class ChessBoard implements Board {
       throw new IllegalArgumentException("Invalid move");
     }
     this.makeMove(movingPiece, type, p1, p2);
+    if (movingPiece instanceof AbstractCastlePiece) {
+      ((AbstractCastlePiece) movingPiece).setHasMoved();
+    }
+    this.curPlayer = this.curPlayer == Player.ONE ? Player.TWO : Player.ONE;
+  }
+
+  // Needed to check if the move puts the king
+  // out of check. Whether it works,
+  // the move is reset after the check.
+  private void undoMove(Piece movingPiece, PiecePosition p1, PiecePosition p2) {
+    this.board[p1.getRow()][p1.getColumn()] = movingPiece;
+    this.board[p2.getRow()][p2.getColumn()] = null;
   }
 
   // makes the move once it has been
@@ -129,12 +160,15 @@ public class ChessBoard implements Board {
       case CASTLE -> {
         this.board[p2.getRow()][p2.getColumn()] = move;
         this.board[p1.getRow()][p1.getColumn()] = null;
+        Piece castleRook;
         if (p2.getColumn() == 2) {
+          castleRook = this.board[p2.getRow()][0];
           this.board[p2.getRow()][0] = null;
-          this.board[p2.getRow()][3] = new Rook(move.getPlayer());
+          this.board[p2.getRow()][3] = castleRook;
         } else {
+          castleRook = this.board[p2.getRow()][7];
           this.board[p2.getRow()][7] = null;
-          this.board[p2.getRow()][4] = new Rook(move.getPlayer());
+          this.board[p2.getRow()][4] = castleRook;
         }
       }
       case CAPTURE -> {

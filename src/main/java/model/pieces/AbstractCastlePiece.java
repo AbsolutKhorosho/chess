@@ -21,4 +21,8 @@ public abstract class AbstractCastlePiece extends AbstractChessPiece {
   public boolean hasMoved() {
     return this.hasMoved;
   }
+
+  public void setHasMoved() {
+    this.hasMoved = true;
+  }
 }

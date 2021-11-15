@@ -26,14 +26,10 @@ public class King extends AbstractCastlePiece {
   @Override
   public boolean isValidMove(PiecePosition p1, PiecePosition p2, BoardState board) {
     Piece takePiece = board.getPieceAt(p2);
-    boolean validMove = !isInCheck(p2, board)
+    return !isInCheck(p2, board)
             && (((Math.abs(p2.getRow() - p1.getRow()) == 1 || Math.abs(p2.getColumn() - p1.getColumn()) == 1)
             && !(takePiece != null && takePiece.getPlayer() == this.getPlayer()))
             || (isCastle(p1, p2, board)));
-    if (validMove) {
-      this.hasMoved = true;
-    }
-    return validMove;
   }
 
   public boolean isInCheck(PiecePosition pos, BoardState board) {

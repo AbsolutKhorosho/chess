@@ -23,10 +23,6 @@ public class Rook extends AbstractCastlePiece {
   // Returns true if the rook move is valid.
   @Override
   public boolean isValidMove(PiecePosition p1, PiecePosition p2, BoardState board) {
-    boolean validMove = isValidRectangularMove(p1, p2, board);
-    if (validMove) {
-      this.hasMoved = true;
-    }
-    return validMove;
+    return isValidRectangularMove(p1, p2, board);
   }
 }
