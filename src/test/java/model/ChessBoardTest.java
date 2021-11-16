@@ -108,5 +108,43 @@ public class ChessBoardTest {
   public void xqcCheckmate() {
     testBoard = new ChessBoard(Player.TWO);
     testBoard.move(new ChessPiecePosition(6, 4), new ChessPiecePosition(4, 4));
+    assertEquals(new Pawn(Player.TWO), testBoard.getPieceAt(new ChessPiecePosition(4, 4)));
+    assertNull(testBoard.getPieceAt(new ChessPiecePosition(6, 4)));
+    testBoard.move(new ChessPiecePosition(1, 4), new ChessPiecePosition(3, 4));
+    assertEquals(new Pawn(Player.ONE), testBoard.getPieceAt(new ChessPiecePosition(3, 4)));
+    assertNull(testBoard.getPieceAt(new ChessPiecePosition(1, 4)));
+    testBoard.move(new ChessPiecePosition(7, 6), new ChessPiecePosition(5, 5));
+    assertEquals(new Knight(Player.TWO), testBoard.getPieceAt(new ChessPiecePosition(5, 5)));
+    assertNull(testBoard.getPieceAt(new ChessPiecePosition(7, 6)));
+    testBoard.move(new ChessPiecePosition(0, 1), new ChessPiecePosition(2, 2));
+    assertEquals(new Knight(Player.ONE), testBoard.getPieceAt(new ChessPiecePosition(2, 2)));
+    assertNull(testBoard.getPieceAt(new ChessPiecePosition(0, 1)));
+    testBoard.move(new ChessPiecePosition(6, 3), new ChessPiecePosition(4, 3));
+    assertEquals(new Pawn(Player.TWO), testBoard.getPieceAt(new ChessPiecePosition(4, 3)));
+    assertNull(testBoard.getPieceAt(new ChessPiecePosition(6, 3)));
+    testBoard.move(new ChessPiecePosition(3, 4), new ChessPiecePosition(4, 3));
+    assertEquals(new Pawn(Player.ONE), testBoard.getPieceAt(new ChessPiecePosition(4, 3)));
+    assertNull(testBoard.getPieceAt(new ChessPiecePosition(3, 4)));
+    testBoard.move(new ChessPiecePosition(5, 5), new ChessPiecePosition(4, 3));
+    assertEquals(new Knight(Player.TWO), testBoard.getPieceAt(new ChessPiecePosition(4, 3)));
+    assertNull(testBoard.getPieceAt(new ChessPiecePosition(5, 5)));
+    testBoard.move(new ChessPiecePosition(0, 5), new ChessPiecePosition(3, 2));
+    assertEquals(new Bishop(Player.ONE), testBoard.getPieceAt(new ChessPiecePosition(3, 2)));
+    assertNull(testBoard.getPieceAt(new ChessPiecePosition(0, 5)));
+    testBoard.move(new ChessPiecePosition(6, 2), new ChessPiecePosition(5, 2));
+    assertEquals(new Pawn(Player.TWO), testBoard.getPieceAt(new ChessPiecePosition(5, 2)));
+    assertNull(testBoard.getPieceAt(new ChessPiecePosition(6, 2)));
+    testBoard.move(new ChessPiecePosition(0, 3), new ChessPiecePosition(2, 5));
+    assertEquals(new Queen(Player.ONE), testBoard.getPieceAt(new ChessPiecePosition(2, 5)));
+    assertNull(testBoard.getPieceAt(new ChessPiecePosition(0, 3)));
+    testBoard.move(new ChessPiecePosition(4, 3), new ChessPiecePosition(2, 2));
+    assertEquals(new Knight(Player.TWO), testBoard.getPieceAt(new ChessPiecePosition(2, 2)));
+    assertNull(testBoard.getPieceAt(new ChessPiecePosition(4, 3)));
+    testBoard.move(new ChessPiecePosition(2, 5), new ChessPiecePosition(6, 5));
+    assertEquals(new Queen(Player.ONE), testBoard.getPieceAt(new ChessPiecePosition(6, 5)));
+    assertNull(testBoard.getPieceAt(new ChessPiecePosition(2, 5)));
+    assertEquals(State.P1_WINNER, testBoard.isGameOver());
   }
+
+  //TODO: Add more checkmate scenarios
 }
