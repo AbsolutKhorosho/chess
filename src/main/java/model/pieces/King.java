@@ -26,26 +26,38 @@ public class King extends AbstractCastlePiece {
   @Override
   public boolean isValidMove(PiecePosition p1, PiecePosition p2, BoardState board) {
     Piece takePiece = board.getPieceAt(p2);
-    return !isInCheck(p2, board)
-            && (((Math.abs(p2.getRow() - p1.getRow()) == 1 || Math.abs(p2.getColumn() - p1.getColumn()) == 1)
-            && !(takePiece != null && takePiece.getPlayer() == this.getPlayer()))
-            || (isCastle(p1, p2, board)));
+    boolean isInCheck = isInCheck(p2, board);
+    boolean validSimpleMove = (isAdjacent(p1, p2))
+            && !(takePiece != null && takePiece.getPlayer() == this.getPlayer());
+    boolean isCastle = isCastle(p1, p2, board);
+    System.out.printf("check: %b, valid: %b, castle: %b%n", isInCheck, validSimpleMove, isCastle);
+    return !isInCheck && (validSimpleMove || isCastle);
+  }
+
+  private boolean isAdjacent(PiecePosition p1, PiecePosition p2) {
+    int rowDistance = Math.abs(p2.getRow() - p1.getRow());
+    int colDistance = Math.abs(p2.getColumn() - p1.getColumn());
+    return (rowDistance == 1 || rowDistance == 0)
+            && (colDistance == 1 || colDistance == 0);
   }
 
   public boolean isInCheck(PiecePosition pos, BoardState board) {
     Piece checkPiece;
     for (int row = 0; row < board.getBoardHeight(); row++) {
       for (int col = 0; col < board.getBoardWidth(); col++) {
-        if (pos.equals(new ChessPiecePosition(row, col))) {
-          continue;
-        }
         checkPiece = board.getPieceAt(new ChessPiecePosition(row, col));
-        if (checkPiece != null && checkPiece.getType() == PieceType.KING) {
-          continue;
+        if (checkPiece != null && checkPiece.getType() == PieceType.KING && checkPiece.getPlayer() != this.getPlayer()) {
+          if (isAdjacent(new ChessPiecePosition(row, col), pos)) {
+            System.out.println("king puts you in check");
+            return true;
+          } else {
+            continue;
+          }
         }
         if (checkPiece != null && checkPiece.getPlayer() != this.getPlayer()) {
           if (checkPiece.isValidMove(new ChessPiecePosition(row, col),
                   pos, board)) {
+            System.out.printf("%d, %d%n", row, col);
             return true;
           }
         }
@@ -63,10 +75,13 @@ public class King extends AbstractCastlePiece {
     if (leftPiece == null && rightPiece == null) {
       return false;
     } else if (leftPiece == null) {
+      System.out.println("right pawn");
       return rightPiece.getPlayer() != this.getPlayer() && rightPiece.getType() == PieceType.PAWN;
     } else if (rightPiece == null) {
+      System.out.println("left pawn");
       return leftPiece.getPlayer() != this.getPlayer() && leftPiece.getType() == PieceType.PAWN;
     } else {
+      System.out.println("botf");
       return (rightPiece.getPlayer() != this.getPlayer() && rightPiece.getType() == PieceType.PAWN)
               || (leftPiece.getPlayer() != this.getPlayer() && leftPiece.getType() == PieceType.PAWN);
     }
@@ -74,6 +89,7 @@ public class King extends AbstractCastlePiece {
 
   private boolean isCastle(PiecePosition p1, PiecePosition p2, BoardState board) {
     int rookColumn = (p1.getColumn() - p2.getColumn() == 2) ? 0 : (p1.getColumn() - p2.getColumn() == -2 ? board.getBoardWidth() - 1 : -1);
+    System.out.println(rookColumn);
     if (rookColumn == -1) {
       return false;
     }

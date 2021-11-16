@@ -208,13 +208,9 @@ public class ChessBoard implements Board {
   @Override
   public State isGameOver() {
     boolean p1HasMove = this.playerHasMove(Player.ONE);
-    System.out.println(p1HasMove);
     boolean p1InCheck = this.isKingInCheck(Player.ONE);
-    System.out.println(p1InCheck);
     boolean p2HasMove = this.playerHasMove(Player.TWO);
-    System.out.println(p2HasMove);
     boolean p2InCheck = this.isKingInCheck(Player.TWO);
-    System.out.println(p2InCheck);
     if (p1HasMove && p2HasMove) {
       return State.IN_PROGRESS;
     } else if (p1HasMove) {
@@ -290,11 +286,9 @@ public class ChessBoard implements Board {
                       }
                     }
                     undoAllMoves(cur, pieceAtPos, type, new ChessPiecePosition(row, col), new ChessPiecePosition(pRow, pCol));
-                    System.out.printf("(%d, %d) to (%d, %d)%n", row, col, pRow, pCol);
                     return true;
                   }
                 } else {
-                  System.out.println("King not in check");
                   return true;
                 }
               }

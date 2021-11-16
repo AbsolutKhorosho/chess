@@ -18,6 +18,7 @@ import view.text.TextView;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test class for the ChessBoard
@@ -100,12 +101,12 @@ public class ChessBoardTest {
     testBoard.move(new ChessPiecePosition(0, 3), new ChessPiecePosition(4, 7));
     assertEquals(new Queen(Player.ONE), testBoard.getPieceAt(new ChessPiecePosition(4, 7)));
     assertNull(testBoard.getPieceAt(new ChessPiecePosition(0, 3)));
-    TextView view = new ChessBoardTextView(testBoard, System.out);
-    try {
-      view.renderBoard();
-    } catch (IOException e) {
-      System.out.println("Could not print output");
-    }
     assertEquals(State.P1_WINNER, testBoard.isGameOver());
+  }
+
+  @Test
+  public void xqcCheckmate() {
+    testBoard = new ChessBoard(Player.TWO);
+    testBoard.move(new ChessPiecePosition(6, 4), new ChessPiecePosition(4, 4));
   }
 }

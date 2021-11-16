@@ -28,11 +28,12 @@ public class KingTest {
   @Test
   public void forwardTest() {
     model = mock(ChessBoard.class);
+    when(model.getCurrentPlayer()).thenReturn(Player.ONE);
     when(model.getBoardWidth()).thenReturn(8);
     when(model.getBoardHeight()).thenReturn(8);
-    when(model.getPieceAt(new ChessPiecePosition(0, 4))).thenReturn(new King(Player.ONE));
-    when(model.getPieceAt(new ChessPiecePosition(1, 4))).thenReturn(null);
     testPiece = new King(Player.ONE);
+    when(model.getPieceAt(new ChessPiecePosition(0, 4))).thenReturn(testPiece);
+    when(model.getPieceAt(new ChessPiecePosition(1, 4))).thenReturn(null);
     assertTrue(testPiece.isValidMove(new ChessPiecePosition(0, 4),
             new ChessPiecePosition(1, 4), model));
   }
@@ -353,7 +354,5 @@ public class KingTest {
     when(model.getPieceAt(new ChessPiecePosition(0, 7))).thenReturn(new Rook(Player.ONE));
     assertTrue(testPiece.isValidMove(new ChessPiecePosition(0, 4),
             new ChessPiecePosition(1, 4), model));
-    assertFalse(testPiece.isValidMove(new ChessPiecePosition(0, 4),
-            new ChessPiecePosition(0, 2), model));
   }
 }
