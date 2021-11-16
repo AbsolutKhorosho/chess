@@ -30,7 +30,6 @@ public class King extends AbstractCastlePiece {
     boolean validSimpleMove = (isAdjacent(p1, p2))
             && !(takePiece != null && takePiece.getPlayer() == this.getPlayer());
     boolean isCastle = isCastle(p1, p2, board);
-    System.out.printf("check: %b, valid: %b, castle: %b%n", isInCheck, validSimpleMove, isCastle);
     return !isInCheck && (validSimpleMove || isCastle);
   }
 
@@ -48,7 +47,6 @@ public class King extends AbstractCastlePiece {
         checkPiece = board.getPieceAt(new ChessPiecePosition(row, col));
         if (checkPiece != null && checkPiece.getType() == PieceType.KING && checkPiece.getPlayer() != this.getPlayer()) {
           if (isAdjacent(new ChessPiecePosition(row, col), pos)) {
-            System.out.println("king puts you in check");
             return true;
           } else {
             continue;
@@ -57,7 +55,6 @@ public class King extends AbstractCastlePiece {
         if (checkPiece != null && checkPiece.getPlayer() != this.getPlayer()) {
           if (checkPiece.isValidMove(new ChessPiecePosition(row, col),
                   pos, board)) {
-            System.out.printf("%d, %d%n", row, col);
             return true;
           }
         }
@@ -75,13 +72,10 @@ public class King extends AbstractCastlePiece {
     if (leftPiece == null && rightPiece == null) {
       return false;
     } else if (leftPiece == null) {
-      System.out.println("right pawn");
       return rightPiece.getPlayer() != this.getPlayer() && rightPiece.getType() == PieceType.PAWN;
     } else if (rightPiece == null) {
-      System.out.println("left pawn");
       return leftPiece.getPlayer() != this.getPlayer() && leftPiece.getType() == PieceType.PAWN;
     } else {
-      System.out.println("botf");
       return (rightPiece.getPlayer() != this.getPlayer() && rightPiece.getType() == PieceType.PAWN)
               || (leftPiece.getPlayer() != this.getPlayer() && leftPiece.getType() == PieceType.PAWN);
     }
@@ -89,7 +83,6 @@ public class King extends AbstractCastlePiece {
 
   private boolean isCastle(PiecePosition p1, PiecePosition p2, BoardState board) {
     int rookColumn = (p1.getColumn() - p2.getColumn() == 2) ? 0 : (p1.getColumn() - p2.getColumn() == -2 ? board.getBoardWidth() - 1 : -1);
-    System.out.println(rookColumn);
     if (rookColumn == -1) {
       return false;
     }
