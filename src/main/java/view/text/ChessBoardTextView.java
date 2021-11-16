@@ -47,6 +47,9 @@ public class ChessBoardTextView implements TextView {
           output.append('o').append(' ');
           continue;
         }
+        if (row == 1 && col == 0) {
+          System.out.println(curPiece);
+        }
         char c = switch (curPiece.getType()) {
           case PAWN -> curPiece.getPlayer() == Player.ONE ? 'P' : 'p';
           case ROOK -> curPiece.getPlayer() == Player.ONE ? 'R' : 'r';

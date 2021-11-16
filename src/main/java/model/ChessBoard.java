@@ -28,6 +28,7 @@ public class ChessBoard implements Board {
   private PiecePosition p2Position;
   private Player curPlayer;
   private final int height, width;
+  private State finalState;
 
   /**
    * Generates a chess board.
@@ -38,6 +39,7 @@ public class ChessBoard implements Board {
     this.width = 8;
     this.initializeBoard();
     this.curPlayer = startingPlayer;
+    this.finalState = State.IN_PROGRESS;
   }
 
   // Initializes the board with the classic arrangement
@@ -106,6 +108,9 @@ public class ChessBoard implements Board {
   @Override
   public void move(PiecePosition p1, PiecePosition p2)
       throws IllegalArgumentException {
+    if (finalState != State.IN_PROGRESS) {
+      return;
+    }
     Piece movingPiece = this.getPieceAt(p1);
     if (movingPiece == null) {
       throw new IllegalArgumentException("Cannot move from empty space");
@@ -214,10 +219,13 @@ public class ChessBoard implements Board {
     if (p1HasMove && p2HasMove) {
       return State.IN_PROGRESS;
     } else if (p1HasMove) {
+      this.finalState = State.P1_WINNER;
       return State.P1_WINNER;
     } else if (p2HasMove) {
+      this.finalState = State.P2_WINNER;
       return State.P2_WINNER;
     } else if (!p1InCheck || !p2InCheck) {
+      this.finalState = State.STALEMATE;
       return State.STALEMATE;
     } else {
       return null;

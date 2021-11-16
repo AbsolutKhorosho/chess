@@ -46,7 +46,16 @@ public interface BoardState {
    * playing the chess game
    */
   enum Player {
-    ONE,
-    TWO
+    ONE("Player 1"), TWO("Player 2");
+
+    private final String name;
+
+    Player(String name) {
+      this.name = name;
+    }
+
+    public String toString() {
+      return this.name;
+    }
   }
 }
