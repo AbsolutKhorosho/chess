@@ -5,7 +5,6 @@ import controller.ChessGameControllerImpl;
 import model.Board;
 import model.BoardState.Player;
 import model.ChessBoard;
-import model.ChessPiecePosition;
 import view.text.ChessBoardTextView;
 import view.text.TextView;
 
