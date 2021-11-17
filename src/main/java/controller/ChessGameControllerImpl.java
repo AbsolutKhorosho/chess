@@ -57,7 +57,7 @@ public class ChessGameControllerImpl implements ChessGameController {
           break;
         default:
           try {
-            this.view.renderMessage("Unknown command");
+            this.view.renderMessage("Unknown command\n");
           } catch (IOException ignored) {}
       }
       entered = userIn.nextLine();
@@ -81,7 +81,7 @@ public class ChessGameControllerImpl implements ChessGameController {
       moves = userIn.nextLine().split(" ");
       if (moves.length != 2) {
         try {
-          this.view.renderMessage("Invalid input move");
+          this.view.renderMessage("Invalid input move\n");
           continue;
         } catch (IOException ignored) {}
       }
@@ -91,7 +91,7 @@ public class ChessGameControllerImpl implements ChessGameController {
         this.gameBoard.move(start, end);
       } catch (IllegalArgumentException e) {
         try {
-          this.view.renderMessage(e.getMessage());
+          this.view.renderMessage(e.getMessage() + "\n");
         } catch (IOException j) {
           System.err.println(j.getMessage());
         }
