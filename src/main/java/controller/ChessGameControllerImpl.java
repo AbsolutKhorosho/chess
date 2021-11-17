@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -59,54 +60,38 @@ public class ChessGameControllerImpl implements ChessGameController {
         continue;
       }
       switch (args[0]) {
-        case "start":
+        case "start" -> {
           this.gameBoard = reset(args);
           this.view.updateBoard(gameBoard);
-          gameLoop();
+          gameLoop(userIn);
           try {
             this.printGameOverMessage();
           } catch (IOException ignored) {}
-          break;
-        default:
-          try {
-            this.view.renderMessage("Unknown command\n");
-          } catch (IOException ignored) {}
+        }
+        default -> {}
       }
       entered = userIn.nextLine();
     }
     try {
       this.printQuitMessage();
     } catch (IOException ignored) {}
+    userIn.close();
   }
 
   // Run by the play method
   // when a new game is started.
-  private void gameLoop() {
-    Scanner userIn = new Scanner(this.in);
-    String[] moves;
+  private void gameLoop(Scanner userIn) {
+    String[] moves = new String[2];
     while (this.gameBoard.isGameOver() == State.IN_PROGRESS) {
       try {
         this.view.renderBoard();
         this.view.renderMessage(this.gameBoard.getCurrentPlayer().toString()
                 + " enter a move: ");
       } catch (IOException ignored) {}
-      if (userIn.hasNextLine())
-        moves = userIn.nextLine().split(" ");
-      else
-        return;
-      if (moves.length < 1) {
-        try {
-          this.view.renderMessage("Invalid command\n");
-          continue;
-        } catch (IOException ignored) {}
-      } else if (moves[0].equalsIgnoreCase("quit") || moves[0].equalsIgnoreCase("q")) {
+      moves[0] = userIn.next();
+      moves[1] = userIn.next();
+      if (moves[0].equalsIgnoreCase("quit") || moves[0].equalsIgnoreCase("q")) {
         break;
-      } else if (moves.length != 2) {
-        try {
-          this.view.renderMessage("Invalid move\n");
-        } catch (IOException e) {
-          System.err.println(e.getMessage() + "\n");
-        }
       }
       PiecePosition start = getPosition(moves[0]);
       PiecePosition end = getPosition(moves[1]);

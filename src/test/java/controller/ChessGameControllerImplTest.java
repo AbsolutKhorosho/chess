@@ -2,8 +2,12 @@ package controller;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.nio.CharBuffer;
 
 import model.Board;
 import model.BoardState;
@@ -12,6 +16,9 @@ import model.ChessBoard.ChessBoardBuilder;
 import view.text.TextView;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Test class for the ChessGame controller
@@ -66,12 +73,11 @@ public class ChessGameControllerImplTest {
   @Test
   public void playDefaultGame() {
     log = new StringBuilder();
-    Readable input = new StringReader(String.format("start%sF2 F3%sE7 E5%sG2 G4%sD8 H4%squit",
-            System.lineSeparator(), System.lineSeparator(), System.lineSeparator(), System.lineSeparator(),
-            System.lineSeparator()));
+    InputStream input = new ByteArrayInputStream("start -p 2\nF2 F3 E7 E5 G2 G4 D8 H4\nquit".getBytes());
+    Readable in = new InputStreamReader(input);
     mockView = new MockView();
     mockModel = new ChessBoardBuilder().player(Player.TWO).build();
-    CuT = new ChessGameControllerImpl(mockView, input);
+    CuT = new ChessGameControllerImpl(mockView, in);
     CuT.play();
     assertEquals("""
             Welcome to Chess
@@ -81,7 +87,7 @@ public class ChessGameControllerImplTest {
             using the same scheme.
             Enter "start" to start the game
             or "help" to get a list of commands.
-            |render board|Player 2 enter a move: |update board|Player 1 enter a move: |render board|Player 2 enter a move: |render board|Player 1 enter a move: |render board|GAME OVER!
+            |update board||render board|Player 2 enter a move: |render board|Player 1 enter a move: |render board|Player 2 enter a move: |render board|Player 1 enter a move: |render board|GAME OVER!
             ---------------------------------
             Type start to play again
             Thanks for playing!
