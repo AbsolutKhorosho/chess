@@ -2,6 +2,8 @@ package view.text;
 
 import java.io.IOException;
 
+import model.BoardState;
+
 /**
  * Interface for a simple view
  * that prints out the state
@@ -35,4 +37,12 @@ public interface TextView {
    *                     not be rendered
    */
   void renderBoard() throws IOException;
+
+  /**
+   * Called by the constructor to update
+   * the board to the new version once
+   * the game is over.
+   * @param board the new board
+   */
+  void updateBoard(BoardState board);
 }

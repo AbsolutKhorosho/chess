@@ -61,4 +61,10 @@ public class ChessBoardTextView implements TextView {
     }
     return output.toString();
   }
+
+  // Updates the board to store
+  // the new, updated board model.
+  public void updateBoard(BoardState board) {
+    this.board = board;
+  }
 }

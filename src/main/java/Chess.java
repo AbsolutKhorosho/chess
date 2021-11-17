@@ -4,7 +4,7 @@ import controller.ChessGameController;
 import controller.ChessGameControllerImpl;
 import model.Board;
 import model.BoardState.Player;
-import model.ChessBoard;
+import model.ChessBoard.ChessBoardBuilder;
 import view.text.ChessBoardTextView;
 import view.text.TextView;
 
@@ -19,10 +19,10 @@ public class Chess {
   // program currently does not support
   // command-line arguments.
   public static void main(String[] args) {
-    Board model = new ChessBoard(Player.ONE);
+    Board model = new ChessBoardBuilder().build();
     TextView view = new ChessBoardTextView(model, System.out);
     Readable in = new InputStreamReader(System.in);
-    ChessGameController controller = new ChessGameControllerImpl(model, view, in);
+    ChessGameController controller = new ChessGameControllerImpl(view, in);
     controller.play();
   }
 }

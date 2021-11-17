@@ -6,6 +6,9 @@ import java.util.Scanner;
 
 import model.Board;
 import model.Board.State;
+import model.BoardBuilder;
+import model.BoardState.Player;
+import model.ChessBoard;
 import model.ChessPiecePosition;
 import model.PiecePosition;
 import view.text.TextView;
@@ -25,17 +28,15 @@ public class ChessGameControllerImpl implements ChessGameController {
   /**
    * Simple constructor sets the passed
    * parameters to the fields.
-   * @param gameBoard Board instance of a game board
    * @param view View to output to
    * @param in Readable to take input from
    * @throws IllegalArgumentException if any parameters are null
    */
-  public ChessGameControllerImpl(Board gameBoard, TextView view, Readable in)
+  public ChessGameControllerImpl(TextView view, Readable in)
         throws IllegalArgumentException {
-    if (gameBoard == null || view == null || in == null) {
+    if (view == null || in == null) {
       throw new IllegalArgumentException("Parameters cannot be null");
     }
-    this.gameBoard = gameBoard;
     this.view = view;
     this.in = in;
   }
@@ -50,10 +51,20 @@ public class ChessGameControllerImpl implements ChessGameController {
     } catch (IOException ignored) {}
     Scanner userIn = new Scanner(this.in);
     String entered = userIn.nextLine();
-    while (!entered.equals("quit")) {
-      switch (entered) {
+    while (!entered.startsWith("quit")) {
+      String[] args = entered.split(" ");
+      if (args.length < 1) {
+        entered = userIn.nextLine();
+        continue;
+      }
+      switch (args[0]) {
         case "start":
+          this.gameBoard = reset(args);
+          this.view.updateBoard(gameBoard);
           gameLoop();
+          try {
+            this.printGameOverMessage();
+          } catch (IOException ignored) {}
           break;
         default:
           try {
@@ -79,11 +90,19 @@ public class ChessGameControllerImpl implements ChessGameController {
                 + " enter a move: ");
       } catch (IOException ignored) {}
       moves = userIn.nextLine().split(" ");
-      if (moves.length != 2) {
+      if (moves.length < 1) {
         try {
-          this.view.renderMessage("Invalid input move\n");
+          this.view.renderMessage("Invalid command\n");
           continue;
         } catch (IOException ignored) {}
+      } else if (moves[0].equalsIgnoreCase("quit") || moves[0].equalsIgnoreCase("q")) {
+        break;
+      } else if (moves.length != 2) {
+        try {
+          this.view.renderMessage("Invalid move\n");
+        } catch (IOException e) {
+          System.err.println(e.getMessage() + "\n");
+        }
       }
       PiecePosition start = getPosition(moves[0]);
       PiecePosition end = getPosition(moves[1]);
@@ -135,7 +154,57 @@ public class ChessGameControllerImpl implements ChessGameController {
     try {
       this.view.renderMessage(output);
     } catch (IOException e) {
-      System.err.println(e.getMessage());
+      System.err.println(e.getMessage() + System.lineSeparator());
     }
+  }
+
+  // Prints out the message after the
+  // game is over.
+  private void printGameOverMessage() throws IOException {
+    String output = """
+            GAME OVER!
+            ---------------------------------
+            Type start to play again
+            """;
+    try {
+      this.view.renderMessage(output);
+    } catch (IOException e) {
+      System.err.println(e.getMessage() + System.lineSeparator());
+    }
+  }
+
+  // Resets the board by creating
+  // a new instance.
+  private Board reset(String[] userInput) throws IllegalArgumentException {
+    BoardBuilder build = new ChessBoard.ChessBoardBuilder();
+    try {
+      for (int i = 1; i < userInput.length; i++) {
+        switch (userInput[i]) {
+          case "-p" -> {
+            Player start = userInput[i + 1].equals("1") ? Player.ONE :
+                    (userInput[i + 1].equals("2") ? Player.TWO : null);
+            if (start == null) {
+              continue;
+            }
+            build = build.player(start);
+          }
+          case "-w" -> {
+            int width = Integer.parseInt(userInput[i + 1]);
+            build = build.width(width);
+          }
+          case "-h" -> {
+            int height = Integer.parseInt(userInput[i + 1]);
+            build = build.height(height);
+          }
+          default -> {
+          }
+        }
+      }
+    } catch (IndexOutOfBoundsException e) {
+      throw new IllegalArgumentException("Insufficient arguments supplied.");
+    } catch (NumberFormatException f) {
+      throw new IllegalArgumentException("Non-numeric value supplied as argument.");
+    }
+    return build.build();
   }
 }

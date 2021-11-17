@@ -12,8 +12,7 @@ import model.pieces.Pawn;
 import model.pieces.Queen;
 import model.pieces.Rook;
 import model.BoardState.Player;
-import view.text.ChessBoardTextView;
-import view.text.TextView;
+import model.ChessBoard.ChessBoardBuilder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -31,7 +30,7 @@ public class ChessBoardTest {
 
   @Test
   public void correctBoardSetup() {
-    testBoard = new ChessBoard(Player.ONE);
+    testBoard = new ChessBoardBuilder().build();
     assertEquals(8, testBoard.getBoardHeight());
     assertEquals(8, testBoard.getBoardWidth());
     assertEquals(new Rook(Player.ONE), testBoard.getPieceAt(new ChessPiecePosition(0, 0)));
@@ -65,7 +64,7 @@ public class ChessBoardTest {
 
   @Test
   public void getOutOfBounds() {
-    testBoard = new ChessBoard(Player.ONE);
+    testBoard = new ChessBoardBuilder().build();
     assertThrows(IllegalArgumentException.class, () -> testBoard.getPieceAt(new ChessPiecePosition(-1, 4)));
     assertThrows(IllegalArgumentException.class, () -> testBoard.getPieceAt(new ChessPiecePosition(8, 3)));
     assertThrows(IllegalArgumentException.class, () -> testBoard.getPieceAt(new ChessPiecePosition(3, -3)));
@@ -74,7 +73,7 @@ public class ChessBoardTest {
 
   @Test
   public void validMoves() {
-    testBoard = new ChessBoard(Player.ONE);
+    testBoard = new ChessBoardBuilder().build();
     testBoard.move(new ChessPiecePosition(1, 4), new ChessPiecePosition(3, 4));
     assertEquals(new Pawn(Player.ONE), testBoard.getPieceAt(new ChessPiecePosition(3, 4)));
     assertNull(testBoard.getPieceAt(new ChessPiecePosition(1, 4)));
@@ -86,9 +85,13 @@ public class ChessBoardTest {
     assertNull(testBoard.getPieceAt(new ChessPiecePosition(7, 1)));
   }
 
+  // F2 F3
+  // E7 E5
+  // G2 G4
+  // D8 H4
   @Test
   public void checkMate() {
-    testBoard = new ChessBoard(Player.TWO);
+    testBoard = new ChessBoardBuilder().build();
     testBoard.move(new ChessPiecePosition(6, 5), new ChessPiecePosition(5, 5));
     assertEquals(new Pawn(Player.TWO), testBoard.getPieceAt(new ChessPiecePosition(5, 5)));
     assertNull(testBoard.getPieceAt(new ChessPiecePosition(6, 5)));
@@ -106,7 +109,7 @@ public class ChessBoardTest {
 
   @Test
   public void xqcCheckmate() {
-    testBoard = new ChessBoard(Player.TWO);
+    testBoard = new ChessBoardBuilder().build();
     testBoard.move(new ChessPiecePosition(6, 4), new ChessPiecePosition(4, 4));
     assertEquals(new Pawn(Player.TWO), testBoard.getPieceAt(new ChessPiecePosition(4, 4)));
     assertNull(testBoard.getPieceAt(new ChessPiecePosition(6, 4)));

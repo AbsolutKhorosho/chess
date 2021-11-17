@@ -34,9 +34,9 @@ public class ChessBoard implements Board {
    * Generates a chess board.
    * (8x8 grid with traditional setup)
    */
-  public ChessBoard(Player startingPlayer) {
-    this.height = 8;
-    this.width = 8;
+  private ChessBoard(Player startingPlayer, int height, int width) {
+    this.height = height;
+    this.width = width;
     this.initializeBoard();
     this.curPlayer = startingPlayer;
     this.finalState = State.IN_PROGRESS;
@@ -338,6 +338,52 @@ public class ChessBoard implements Board {
       return this.p1King.isInCheck(this.p1Position, this);
     } else {
       return this.p2King.isInCheck(this.p2Position, this);
+    }
+  }
+
+  // Simple builder class used to generate instances
+  // of the ChessBoard class.
+  public static class ChessBoardBuilder implements BoardBuilder {
+    private Player p;
+    private int buildWidth;
+    private int buildHeight;
+
+    /**
+     * Constructor sets the default
+     * values for a ChessBoard to build.
+     */
+    public ChessBoardBuilder() {
+      this.p = Player.ONE;
+      this.buildWidth = 8;
+      this.buildHeight = 8;
+    }
+
+    // Sets the player that starts the game.
+    @Override
+    public BoardBuilder player(Player p) {
+      this.p = p;
+      return this;
+    }
+
+    // Sets the width of the board.
+    @Override
+    public BoardBuilder width(int width) {
+      this.buildWidth = width;
+      return this;
+    }
+
+    // Sets the height of the board.
+    @Override
+    public BoardBuilder height(int height) {
+      this.buildHeight = height;
+      return this;
+    }
+
+    // Builds the Board using the specified
+    // parameters.
+    @Override
+    public Board build() {
+      return new ChessBoard(p, buildHeight, buildWidth);
     }
   }
 }
