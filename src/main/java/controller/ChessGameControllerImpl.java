@@ -53,7 +53,7 @@ public class ChessGameControllerImpl implements ChessGameController {
     } catch (IOException ignored) {}
     Scanner userIn = new Scanner(this.in);
     String entered = userIn.nextLine();
-    while (!entered.startsWith("quit")) {
+    while (!entered.startsWith("q")) {
       String[] args = entered.split(" ");
       if (args.length < 1) {
         entered = userIn.nextLine();
@@ -89,8 +89,11 @@ public class ChessGameControllerImpl implements ChessGameController {
                 + " enter a move: ");
       } catch (IOException ignored) {}
       moves[0] = userIn.next();
-      moves[1] = userIn.next();
       if (moves[0].equalsIgnoreCase("quit") || moves[0].equalsIgnoreCase("q")) {
+        break;
+      }
+      moves[1] = userIn.next();
+      if (moves[1].equalsIgnoreCase("quit") || moves[1].equalsIgnoreCase("q")) {
         break;
       }
       PiecePosition start = getPosition(moves[0]);

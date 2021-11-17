@@ -91,7 +91,7 @@ public class ChessBoardTest {
   // D8 H4
   @Test
   public void checkMate() {
-    testBoard = new ChessBoardBuilder().build();
+    testBoard = new ChessBoardBuilder().player(Player.TWO).build();
     testBoard.move(new ChessPiecePosition(6, 5), new ChessPiecePosition(5, 5));
     assertEquals(new Pawn(Player.TWO), testBoard.getPieceAt(new ChessPiecePosition(5, 5)));
     assertNull(testBoard.getPieceAt(new ChessPiecePosition(6, 5)));
@@ -109,7 +109,7 @@ public class ChessBoardTest {
 
   @Test
   public void xqcCheckmate() {
-    testBoard = new ChessBoardBuilder().build();
+    testBoard = new ChessBoardBuilder().player(Player.TWO).build();
     testBoard.move(new ChessPiecePosition(6, 4), new ChessPiecePosition(4, 4));
     assertEquals(new Pawn(Player.TWO), testBoard.getPieceAt(new ChessPiecePosition(4, 4)));
     assertNull(testBoard.getPieceAt(new ChessPiecePosition(6, 4)));

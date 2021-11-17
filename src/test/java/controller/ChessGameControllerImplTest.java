@@ -32,6 +32,16 @@ public class ChessGameControllerImplTest {
   private ChessGameController CuT;
   private StringBuilder log;
 
+  private static final String welcomeMessage = """
+          Welcome to Chess
+          By: Matt Stetter
+          A move is made by entering the starting
+          position (A1-H8) and then the ending position
+          using the same scheme.
+          Enter "start" to start the game
+          or "help" to get a list of commands.
+          """;
+
   private class MockView implements TextView {
 
     @Override
@@ -58,14 +68,7 @@ public class ChessGameControllerImplTest {
     mockModel = new ChessBoardBuilder().build();
     CuT = new ChessGameControllerImpl(mockView, input);
     CuT.play();
-    assertEquals("""
-            Welcome to Chess
-            By: Matt Stetter
-            A move is made by entering the starting
-            position (A1-H8) and then the ending position
-            using the same scheme.
-            Enter "start" to start the game
-            or "help" to get a list of commands.
+    assertEquals(welcomeMessage + """
             Thanks for playing!
             """, log.toString());
   }
@@ -79,14 +82,7 @@ public class ChessGameControllerImplTest {
     mockModel = new ChessBoardBuilder().player(Player.TWO).build();
     CuT = new ChessGameControllerImpl(mockView, in);
     CuT.play();
-    assertEquals("""
-            Welcome to Chess
-            By: Matt Stetter
-            A move is made by entering the starting
-            position (A1-H8) and then the ending position
-            using the same scheme.
-            Enter "start" to start the game
-            or "help" to get a list of commands.
+    assertEquals(welcomeMessage + """
             |update board||render board|Player 2 enter a move: |render board|Player 1 enter a move: |render board|Player 2 enter a move: |render board|Player 1 enter a move: |render board|GAME OVER!
             ---------------------------------
             Type start to play again
@@ -94,9 +90,20 @@ public class ChessGameControllerImplTest {
             """, log.toString());
   }
 
-
-
-
-  // TODO: NoSuchElementException tests
-
+  @Test
+  public void quitStartGame() {
+    log = new StringBuilder();
+    InputStream input = new ByteArrayInputStream("start\nquit\nquit".getBytes());
+    Readable in = new InputStreamReader(input);
+    mockView = new MockView();
+    mockModel = new ChessBoardBuilder().build();
+    CuT = new ChessGameControllerImpl(mockView, in);
+    CuT.play();
+    assertEquals(welcomeMessage + """
+            |update board||render board|Player 1 enter a move: |render board|GAME OVER!
+            ---------------------------------
+            Type start to play again
+            Thanks for playing!
+            """, log.toString());
+  }
 }
