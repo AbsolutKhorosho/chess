@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import model.Board;
@@ -89,7 +90,10 @@ public class ChessGameControllerImpl implements ChessGameController {
         this.view.renderMessage(this.gameBoard.getCurrentPlayer().toString()
                 + " enter a move: ");
       } catch (IOException ignored) {}
-      moves = userIn.nextLine().split(" ");
+      if (userIn.hasNextLine())
+        moves = userIn.nextLine().split(" ");
+      else
+        return;
       if (moves.length < 1) {
         try {
           this.view.renderMessage("Invalid command\n");
@@ -115,6 +119,11 @@ public class ChessGameControllerImpl implements ChessGameController {
           System.err.println(j.getMessage());
         }
       }
+    }
+    try {
+      this.view.renderBoard();
+    } catch (IOException e) {
+      System.err.println(e.getMessage() + System.lineSeparator());
     }
   }
 
