@@ -113,9 +113,8 @@ public class ChessGameControllerImpl implements ChessGameController {
     String output = """
             Welcome to Chess
             By: Matt Stetter
-            A move is made by entering: move
-            followed by the starting position
-            (A1-H8) and then the ending position
+            A move is made by entering the starting
+            position (A1-H8) and then the ending position
             using the same scheme.
             Enter "start" to start the game
             or "help" to get a list of commands.
