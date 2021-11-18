@@ -26,10 +26,7 @@ public class ChessBoardPanel extends JPanel implements BoardPanel {
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
     String message = "Chess game coming soon :)";
-    char[] data = new char[message.length()];
-    for (int i = 0; i < message.length(); i++)
-      data[i] = message.charAt(i);
-    g.drawChars(data, 0, message.length(), 0, 0);
+    g.drawString(message, 20, 20);
     this.setPreferredSize(new Dimension(500, 500));
   }
 

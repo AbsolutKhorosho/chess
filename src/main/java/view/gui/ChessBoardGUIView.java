@@ -34,9 +34,9 @@ public class ChessBoardGUIView extends JFrame implements BoardGUIView {
     textPane.setLayout(new GridLayout(0, 1));
     textPane.add(this.messageLabel, BorderLayout.PAGE_END);
     this.add(textPane);
-    pack();
-    setVisible(true);
-    setDefaultCloseOperation(EXIT_ON_CLOSE);
+    this.pack();
+    this.setVisible(true);
+    this.setDefaultCloseOperation(EXIT_ON_CLOSE);
   }
 
   @Override
