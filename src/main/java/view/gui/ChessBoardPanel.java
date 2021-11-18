@@ -30,7 +30,7 @@ public class ChessBoardPanel extends JPanel implements BoardPanel {
     for (int i = 0; i < message.length(); i++)
       data[i] = message.charAt(i);
     g.drawChars(data, 0, message.length(), 0, 0);
-    this.setPreferredSize(new Dimension(100, 100));
+    this.setPreferredSize(new Dimension(500, 500));
   }
 
   @Override
