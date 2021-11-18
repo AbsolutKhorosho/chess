@@ -17,6 +17,7 @@ public class ChessBoardGUIView extends JFrame implements BoardGUIView {
   private BoardState board;
   private FeaturesController controller;
   private BoardPanel chessBoard;
+  private JLabel messageLabel;
 
   public ChessBoardGUIView(BoardState board) {
     super("Chess Board");
@@ -26,16 +27,26 @@ public class ChessBoardGUIView extends JFrame implements BoardGUIView {
     this.board = board;
     this.controller = new ChessFeaturesController((Board) board, this);
     this.chessBoard = new ChessBoardPanel(board);
+    this.chessBoard.setController(this.controller);
+    this.messageLabel = new JLabel();
+    this.getContentPane().add((JPanel) this.chessBoard, BorderLayout.CENTER);
+    JPanel textPane = new JPanel();
+    textPane.setLayout(new GridLayout(0, 1));
+    textPane.add(this.messageLabel, BorderLayout.PAGE_END);
+    this.getContentPane().add(textPane);
+    pack();
+    setVisible(true);
+    setDefaultCloseOperation(EXIT_ON_CLOSE);
   }
 
   @Override
   public void refresh() {
-
+    this.repaint();
   }
 
   @Override
   public void renderMessage(String message) {
-
+    this.messageLabel.setText(message);
   }
 
   @Override
