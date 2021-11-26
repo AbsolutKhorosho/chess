@@ -22,19 +22,26 @@ public class ChessBoardGUIView extends JFrame implements BoardGUIView {
   public ChessBoardGUIView(BoardState board) {
     super("Chess Board");
 
-    setLayout(new BorderLayout());
     setSize(new Dimension(500, 500));
+
+    JPanel mainPanel = new JPanel();
+    mainPanel.setLayout(new GridLayout());
 
     this.board = board;
     this.controller = new ChessFeaturesController((Board) board, this);
     this.chessBoard = new ChessBoardPanel(board);
     this.chessBoard.setController(this.controller);
     this.messageLabel = new JLabel();
-    add((JPanel)this.chessBoard, BorderLayout.CENTER);
+
+    mainPanel.add((JPanel)this.chessBoard, BorderLayout.CENTER);
+
     JPanel textPane = new JPanel();
     textPane.setLayout(new GridLayout(0, 1));
     textPane.add(this.messageLabel, BorderLayout.PAGE_END);
+
     add(textPane);
+    add(mainPanel);
+
     pack();
     setVisible(true);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
