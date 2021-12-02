@@ -152,5 +152,10 @@ public class ChessBoardPanel extends JPanel implements BoardPanel {
         return this.p == ((PlayerPiece) other).p
               && this.type == ((PlayerPiece) other).type;
     }
+
+    @Override
+    public int hashCode() {
+      return (this.p + "" + this.type).hashCode();
+    }
   }
 }
