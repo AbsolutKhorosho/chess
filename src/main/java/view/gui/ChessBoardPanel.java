@@ -20,11 +20,10 @@ public class ChessBoardPanel extends JPanel implements BoardPanel {
   private BoardState board;
   private Map<PlayerPiece, Image> imageMap;
   private FeaturesController controller;
-  private JLabel[][] imageGrid;
 
   private int originX, originY;
-  private static final int cellSize = 50;
-  private static final int padding = 100;
+  private static final int cellSize = 80;
+  private static final int padding = 0;
 
   public ChessBoardPanel(BoardState board) {
     super();
@@ -32,8 +31,6 @@ public class ChessBoardPanel extends JPanel implements BoardPanel {
     setLayout(new GridLayout(8, 8));
     setBackground(Color.WHITE);
     setPreferredSize(new Dimension(8 * cellSize + padding, 8 * cellSize + padding));
-    this.imageGrid = new JLabel[8][8];
-    setIconMap();
 
     setVisible(true);
     imageMap = new HashMap<>();
@@ -47,31 +44,35 @@ public class ChessBoardPanel extends JPanel implements BoardPanel {
     originX = (padding);
     originY = (padding);
 
-    if (this.imageMap.get(new PlayerPiece(Player.ONE, PieceType.PAWN)) == null) {
-      return;
-    }
-
     Piece cur;
     Image draw;
-    JLabel drawThis = this.imageGrid[0][0];
 
-    drawThis.setIcon(new ImageIcon(this.imageMap.get(new PlayerPiece(Player.ONE, PieceType.PAWN))));
-
-//    for (int row = 0; row < board.getBoardHeight(); row++) {
-//      for (int col = 0; col < board.getBoardWidth(); col++) {
-//        cur = board.getPieceAt(new ChessPiecePosition(row, col));
-//        if (cur == null) {
-//          draw = imageMap.get(null);
-//        } else {
-//          draw = imageMap.get(new PlayerPiece(Player.ONE, cur.getType()));
-//        }
-//        drawGraph.drawImage(draw, originX + (col * cellSize), originY + (row * cellSize), new JPanel());
-//      }
-//    }
+    for (int row = 0; row < board.getBoardHeight(); row++) {
+      for (int col = 0; col < board.getBoardWidth(); col++) {
+        cur = board.getPieceAt(new ChessPiecePosition(row, col));
+        if (cur == null) {
+          draw = imageMap.get(null);
+        } else {
+          draw = imageMap.get(new PlayerPiece(cur.getPlayer(), cur.getType()));
+        }
+        g.drawImage(draw,
+                originX + (cellSize * col),
+                originY + (cellSize * row),
+                new JPanel()
+        );
+        g.drawRect(originX + (cellSize * col),
+                originY + (cellSize * row),
+                cellSize, cellSize
+        );
+      }
+    }
   }
 
   private void setImages() {
     try {
+
+      // LOAD BLACK PIECES
+
       Image king = ImageIO.read(new File(getAbsoluteFilePath("res\\BKing.png")));
       king = king.getScaledInstance(cellSize, cellSize, Image.SCALE_DEFAULT);
       imageMap.put(new PlayerPiece(Player.ONE, PieceType.KING), king);
@@ -96,6 +97,34 @@ public class ChessBoardPanel extends JPanel implements BoardPanel {
       rook = rook.getScaledInstance(cellSize, cellSize, Image.SCALE_DEFAULT);
       imageMap.put(new PlayerPiece(Player.ONE, PieceType.ROOK), rook);
 
+      // LOAD WHITE PIECES
+
+      Image wKing = ImageIO.read(new File(getAbsoluteFilePath("res\\WKing.png")));
+      wKing = wKing.getScaledInstance(cellSize, cellSize, Image.SCALE_DEFAULT);
+      imageMap.put(new PlayerPiece(Player.TWO, PieceType.KING), wKing);
+
+      Image wQueen = ImageIO.read(new File(getAbsoluteFilePath("res\\WQueen.png")));
+      wQueen = wQueen.getScaledInstance(cellSize, cellSize, Image.SCALE_DEFAULT);
+      imageMap.put(new PlayerPiece(Player.TWO, PieceType.QUEEN), wQueen);
+
+      Image wBishop = ImageIO.read(new File(getAbsoluteFilePath("res\\WBishop.png")));
+      wBishop = wBishop.getScaledInstance(cellSize, cellSize, Image.SCALE_DEFAULT);
+      imageMap.put(new PlayerPiece(Player.TWO, PieceType.BISHOP), wBishop);
+
+      Image wKnight = ImageIO.read(new File(getAbsoluteFilePath("res\\WKnight.png")));
+      wKnight = wKnight.getScaledInstance(cellSize, cellSize, Image.SCALE_DEFAULT);
+      imageMap.put(new PlayerPiece(Player.TWO, PieceType.KNIGHT), wKnight);
+
+      Image wPawn = ImageIO.read(new File(getAbsoluteFilePath("res\\WPawn.png")));
+      wPawn = wPawn.getScaledInstance(cellSize, cellSize, Image.SCALE_DEFAULT);
+      imageMap.put(new PlayerPiece(Player.TWO, PieceType.PAWN), wPawn);
+
+      Image wRook = ImageIO.read(new File(getAbsoluteFilePath("res\\WRook.png")));
+      wRook = wRook.getScaledInstance(cellSize, cellSize, Image.SCALE_DEFAULT);
+      imageMap.put(new PlayerPiece(Player.TWO, PieceType.ROOK), wRook);
+
+      // USED FOR BLANK TILE
+
       Image blank = ImageIO.read(new File(getAbsoluteFilePath("res\\Blank.png")));
       blank = blank.getScaledInstance(cellSize, cellSize, Image.SCALE_DEFAULT);
       imageMap.put(null, blank);
@@ -113,15 +142,6 @@ public class ChessBoardPanel extends JPanel implements BoardPanel {
     }
     else {
       return ".\\" + path; // treat it as a relative path from the current directory
-    }
-  }
-
-  private void setIconMap() {
-    for (int i = 0; i < 8; i++) {
-      for (int j = 0; j < 8; j++) {
-        this.imageGrid[i][j] = new JLabel();
-        this.add(this.imageGrid[i][j]);
-      }
     }
   }
 
