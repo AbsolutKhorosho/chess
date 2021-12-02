@@ -1,6 +1,7 @@
 package view.gui;
 
 import model.BoardState;
+import model.PiecePosition;
 
 /**
  * A panel on the window
@@ -25,7 +26,13 @@ public interface BoardPanel {
    * Sets the board to be used
    * by the panel for rendering
    * the current state of the board.
-   * @param board
+   * @param board board to use
    */
   void setBoard(BoardState board);
+
+  /**
+   * Highlights the square on the board.
+   * @param pos position to highlight
+   */
+  void highlight(PiecePosition pos);
 }

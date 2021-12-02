@@ -1,6 +1,7 @@
 package view.gui;
 
 import model.Board;
+import model.PiecePosition;
 
 /**
  * Interface for a GUI board that
@@ -25,8 +26,17 @@ public interface BoardGUIView {
   void renderMessage(String message);
 
   /**
-   *
-   * @param board
+   * Controller calls GUI to highlight a square
+   * when it is the first part of a move.
+   * @param pos position to highlight
+   */
+  void highlightSquare(PiecePosition pos);
+
+  /**
+   * Sets the current board used by the
+   * GUI, called by the constructor to
+   * reset the game.
+   * @param board new game board
    */
   void setBoard(Board board);
 }

@@ -1,7 +1,6 @@
 package view.gui;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -13,6 +12,7 @@ import javax.swing.*;
 import model.BoardState;
 import model.BoardState.Player;
 import model.ChessPiecePosition;
+import model.PiecePosition;
 import model.pieces.Piece;
 import model.pieces.Piece.PieceType;
 
@@ -150,19 +150,32 @@ public class ChessBoardPanel extends JPanel implements BoardPanel {
     this.controller = controller;
   }
 
+  @Override
   public void setBoard(BoardState board) {
     this.board = board;
+  }
+
+  @Override
+  public void highlight(PiecePosition pos) {
+    Graphics g = this.getGraphics();
+    g.setColor(Color.RED);
+    g.fillRect(originX + (pos.getColumn() * cellSize),
+            originY + (pos.getRow() * cellSize),
+            cellSize, cellSize
+    );
+    g.setColor(Color.BLACK);
   }
 
   private static class PlayerPiece {
     private Player p;
     private PieceType type;
 
-    public PlayerPiece(Player p, PieceType type) {
+    private PlayerPiece(Player p, PieceType type) {
       this.p = p;
       this.type = type;
     }
 
+    @Override
     public boolean equals(Object other) {
       if (other == null)
         return false;

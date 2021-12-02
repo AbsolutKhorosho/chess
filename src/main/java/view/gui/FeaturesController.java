@@ -17,4 +17,11 @@ public interface FeaturesController {
    * @param pos move position
    */
   void processMove(PiecePosition pos);
+
+  /**
+   * Returns true if the game is currently
+   * running, and false otherwise.
+   * @return true if running, false otherwise
+   */
+  boolean gameRunning();
 }

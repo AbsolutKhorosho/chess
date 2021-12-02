@@ -6,6 +6,7 @@ import javax.swing.*;
 
 import model.Board;
 import model.BoardState;
+import model.PiecePosition;
 
 /**
  * A simple GUI written in swing
@@ -50,11 +51,17 @@ public class ChessBoardGUIView extends JFrame implements BoardGUIView {
   @Override
   public void refresh() {
     this.repaint();
+
   }
 
   @Override
   public void renderMessage(String message) {
     this.messageLabel.setText(message);
+  }
+
+  @Override
+  public void highlightSquare(PiecePosition pos) {
+    this.chessBoard.highlight(pos);
   }
 
   @Override
