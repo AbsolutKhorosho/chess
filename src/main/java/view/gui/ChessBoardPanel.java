@@ -1,6 +1,8 @@
 package view.gui;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,6 +18,13 @@ import model.PiecePosition;
 import model.pieces.Piece;
 import model.pieces.Piece.PieceType;
 
+/**
+ * Class that extends JPanel acts as
+ * the main panel for playing the chess
+ * game.
+ *
+ * @author Matt Stetter
+ */
 public class ChessBoardPanel extends JPanel implements BoardPanel {
   private BoardState board;
   private Map<PlayerPiece, Image> imageMap;
@@ -25,6 +34,12 @@ public class ChessBoardPanel extends JPanel implements BoardPanel {
   private static final int cellSize = 80;
   private static final int padding = 0;
 
+  /**
+   * Constructor holds the board
+   * to draw the current state of
+   * the game.
+   * @param board game state
+   */
   public ChessBoardPanel(BoardState board) {
     super();
     this.board = board;
@@ -35,6 +50,8 @@ public class ChessBoardPanel extends JPanel implements BoardPanel {
     setVisible(true);
     imageMap = new HashMap<>();
     setImages();
+
+    this.addMouseListener(new ClickMove());
   }
 
   @Override
@@ -66,6 +83,7 @@ public class ChessBoardPanel extends JPanel implements BoardPanel {
         );
       }
     }
+
   }
 
   private void setImages() {
@@ -189,6 +207,19 @@ public class ChessBoardPanel extends JPanel implements BoardPanel {
     @Override
     public int hashCode() {
       return (this.p + "" + this.type).hashCode();
+    }
+  }
+
+  private class ClickMove extends MouseAdapter {
+
+    // Calls the processMove method in the controller
+    // when a click is made on the screen.
+    @Override
+    public void mouseClicked(MouseEvent e) {
+      super.mouseClicked(e);
+      int row = (e.getY() - padding) / cellSize;
+      int col = (e.getX() - padding) / cellSize;
+      controller.processMove(new ChessPiecePosition(row, col));
     }
   }
 }

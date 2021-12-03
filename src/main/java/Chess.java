@@ -39,7 +39,6 @@ public class Chess {
       System.err.println("Expected number but found other character\n");
       return;
     }
-    System.out.println(System.getProperty("user.dir"));
     Board model = new ChessBoardBuilder().player(startingPlayer).build();
     if (!gui) {
       TextView view = new ChessBoardTextView(model, System.out);
