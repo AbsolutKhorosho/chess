@@ -63,9 +63,4 @@ public class ChessBoardGUIView extends JFrame implements BoardGUIView {
   public void highlightSquare(PiecePosition pos) {
     this.chessBoard.highlight(pos);
   }
-
-  @Override
-  public void setBoard(Board board) {
-    this.board = board;
-  }
 }

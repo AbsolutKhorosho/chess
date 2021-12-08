@@ -68,13 +68,14 @@ public class ChessFeaturesController implements FeaturesController {
         }
       } catch (IllegalArgumentException e) {
         this.view.renderMessage(e.getMessage());
+      } finally {
+        firstMoveMade = false;
       }
     } else {
       this.view.highlightSquare(pos);
       firstMoveMade = true;
       firstPosition = pos;
     }
-    this.view.setBoard(this.board);
     this.view.refresh();
   }
 

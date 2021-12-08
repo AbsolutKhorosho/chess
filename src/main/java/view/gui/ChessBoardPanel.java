@@ -169,11 +169,6 @@ public class ChessBoardPanel extends JPanel implements BoardPanel {
   }
 
   @Override
-  public void setBoard(BoardState board) {
-    this.board = board;
-  }
-
-  @Override
   public void highlight(PiecePosition pos) {
     Graphics g = this.getGraphics();
     g.setColor(Color.RED);

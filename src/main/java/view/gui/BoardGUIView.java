@@ -31,12 +31,4 @@ public interface BoardGUIView {
    * @param pos position to highlight
    */
   void highlightSquare(PiecePosition pos);
-
-  /**
-   * Sets the current board used by the
-   * GUI, called by the constructor to
-   * reset the game.
-   * @param board new game board
-   */
-  void setBoard(Board board);
 }

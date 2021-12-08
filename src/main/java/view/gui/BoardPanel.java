@@ -23,14 +23,6 @@ public interface BoardPanel {
   void setController(FeaturesController controller);
 
   /**
-   * Sets the board to be used
-   * by the panel for rendering
-   * the current state of the board.
-   * @param board board to use
-   */
-  void setBoard(BoardState board);
-
-  /**
    * Highlights the square on the board.
    * @param pos position to highlight
    */
