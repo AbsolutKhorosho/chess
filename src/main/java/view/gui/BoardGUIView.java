@@ -1,6 +1,5 @@
 package view.gui;
 
-import model.Board;
 import model.PiecePosition;
 
 /**
